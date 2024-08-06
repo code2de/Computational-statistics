@@ -1,0 +1,52 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy.stats import skew, kurtosis
+from sklearn.datasets import load_iris
+
+# Load the Iris dataset
+iris = load_iris()
+df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+df['species'] = iris.target
+df['species'] = df['species'].map(dict(enumerate(iris.target_names)))
+
+# Display the first five rows of the DataFrame
+print("First five rows of the dataset:")
+print(df.head())
+
+# Select an attribute for analysis
+attribute = 'sepal length (cm)'  # You can change this to any feature name from iris.feature_names
+
+# Check if the attribute exists in the DataFrame
+if attribute not in df.columns:
+    print(f"Attribute '{attribute}' not found in the dataset.")
+else:
+    # Plot the histogram and KDE
+    plt.figure(figsize=(12, 6))
+
+    # Histogram
+    plt.subplot(1, 2, 1)
+    sns.histplot(df[attribute], kde=False, bins=20)
+    plt.title(f'Histogram of {attribute}')
+    
+    # KDE Plot
+    plt.subplot(1, 2, 2)
+    sns.kdeplot(df[attribute], fill=True)
+    plt.title(f'KDE of {attribute}')
+    
+    plt.tight_layout()
+    plt.show()
+
+    # Probability (mean and variance)
+    mean_value = df[attribute].mean()
+    variance_value = df[attribute].var()
+    
+    print(f"\nProbability (mean) of {attribute}: {mean_value:.2f}")
+    print(f"Variance of {attribute}: {variance_value:.2f}")
+
+    # Skewness and Kurtosis
+    attribute_skewness = skew(df[attribute])
+    attribute_kurtosis = kurtosis(df[attribute])
+
+    print(f"Skewness of {attribute}: {attribute_skewness:.2f}")
+    print(f"Kurtosis of {attribute}: {attribute_kurtosis:.2f}")
