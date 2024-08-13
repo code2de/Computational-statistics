@@ -1,0 +1,41 @@
+# Import necessary libraries
+import pandas as pd
+import plotly.express as px
+import matplotlib.pyplot as plt
+from tabulate import tabulate
+
+# Load the Iris dataset
+df = px.data.iris()
+
+# Print the total number of records
+print("Total Number of Records:", df.shape[0])
+
+# Calculate the mean and standard deviation of each attribute
+stats = df[['sepal_length', 'sepal_width', 'petal_length', 'petal_width']].agg(['mean', 'std'])
+
+# Print the mean and standard deviation in a table format
+print("\nMean and Standard Deviation of Each Attribute:")
+print(tabulate(stats, headers='keys', tablefmt='psql'))
+
+# Plot the normal distribution of each attribute using histograms
+fig, axs = plt.subplots(2, 2, figsize=(12, 10))
+axs[0, 0].hist(df['sepal_length'], bins=20, alpha=0.5, label='Sepal Length')
+axs[0, 0].set_title('Sepal Length Distribution')
+axs[0, 1].hist(df['sepal_width'], bins=20, alpha=0.5, label='Sepal Width')
+axs[0, 1].set_title('Sepal Width Distribution')
+axs[1, 0].hist(df['petal_length'], bins=20, alpha=0.5, label='Petal Length')
+axs[1, 0].set_title('Petal Length Distribution')
+axs[1, 1].hist(df['petal_width'], bins=20, alpha=0.5, label='Petal Width')
+axs[1, 1].set_title('Petal Width Distribution')
+plt.tight_layout()
+plt.show()
+
+# Plot the distribution of each attribute using Plotly Express
+fig = px.histogram(df, x="sepal_length", title="Sepal Length Distribution")
+fig.show()
+fig = px.histogram(df, x="sepal_width", title="Sepal Width Distribution")
+fig.show()
+fig = px.histogram(df, x="petal_length", title="Petal Length Distribution")
+fig.show()
+fig = px.histogram(df, x="petal_width", title="Petal Width Distribution")
+fig.show()
