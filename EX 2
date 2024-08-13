@@ -1,0 +1,22 @@
+# Import necessary libraries
+import pandas as pd
+import plotly.express as px
+
+# Load the Iris dataset
+df = px.data.iris()
+
+# Print the first 10 records
+print("First 10 Records:")
+print(df.head(10))
+
+# Print the number of rows and columns
+print("\nNumber of Rows and Columns:")
+print(df.shape)
+
+# Print the column names
+print("\nColumn Names:")
+print(df.columns)
+
+# Print the mean of all the attributes
+print("\nMean of All Attributes:")
+print(df[['sepal_length', 'sepal_width', 'petal_length', 'petal_width']].mean())
