@@ -1,0 +1,33 @@
+# Import necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+
+# Load the Iris dataset from plotly.express
+df = px.data.iris()
+
+# Generate the statistical description of the Iris dataset
+print("Statistical Description of Iris Dataset:")
+print(df.describe())
+
+# Select an attribute for the box plot and dependency curve
+attribute = 'sepal_length'
+
+# Generate the box plot for the selected attribute
+plt.figure(figsize=(8, 6))
+sns.boxplot(x=df[attribute])
+plt.title("Box Plot of Sepal Length")
+plt.show()
+
+# Compare the box plot with the relevant statistical data
+print("\nStatistical Data for Sepal Length:")
+print(df[attribute].describe())
+
+# Generate the dependency curve for the selected attribute
+plt.figure(figsize=(8, 6))
+sns.scatterplot(x=df[attribute], y=df['sepal_width'])
+plt.title("Dependency Curve of Sepal Length vs Sepal Width")
+plt.xlabel("Sepal Length")
+plt.ylabel("Sepal Width")
+plt.show()
