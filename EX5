@@ -1,0 +1,63 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.optimize import minimize
+from statsmodels.regression.linear_model import OLS
+
+# Step i: Generate 100 random values between -10 to 30 and refer them as X
+X = np.linspace(-10, 30, 100)
+
+# Step ii: Find the Y using the function y=10+4x+e
+e = np.random.normal(0, 1, 100)  # error term
+Y = 10 + 4 * X + e
+
+# Step iii: Put the X and Y values in a dataframe
+df = pd.DataFrame({'X': X, 'Y': Y})
+
+# Step iv: Plot the generated values using regplot() function
+plt.figure(figsize=(8, 6))
+sns.regplot(x='X', y='Y', data=df)
+plt.title("Scatter Plot of X vs Y")
+plt.show()
+
+# Step v: Find the OLS regression results using OLS model
+X_ols = df[['X']]
+Y_ols = df['Y']
+ols_model = OLS(Y_ols, X_ols).fit()
+print("OLS Regression Results:")
+print(ols_model.params)
+print("OLS Residual Standard Deviation:", ols_model.bse)
+
+# Step vi: Calculate the SD for the residuals
+residuals = ols_model.resid
+sd_resid = np.std(residuals)
+print("SD of Residuals:", sd_resid)
+
+# Step vii: Construct the MLE model using L-BFGS-B Memory optimization Algorithm
+def log_likelihood(params):
+    beta0, beta1, sigma = params
+    y_pred = beta0 + beta1 * X
+    ll = -0.5 * np.sum((Y - y_pred) ** 2 / sigma ** 2) - 0.5 * np.log(2 * np.pi * sigma ** 2)
+    return -ll
+
+initial_params = [10, 4, 1]  # initial values for beta0, beta1, and sigma
+result = minimize(log_likelihood, initial_params, method="L-BFGS-B")
+print("MLE Results:")
+print("Message:", result.message)
+print("Success:", result.success)
+print("Status:", result.status)
+print("Fun:", result.fun)
+print("x:", result.x)
+print("Nit:", result.nit)
+print("Jac:", result.jac)
+print("Nfev:", result.nfev)
+print("Njev:", result.njev)
+print("Hess Inv:", result.hess_inv)
+
+# Step viii: Compare MLE parameters with OLS Parameters
+print("\nComparison of MLE and OLS Parameters:")
+print("Parameter\tMLE\tOLS")
+print("beta0\t{:.4f}\t{:.4f}".format(result.x[0], ols_model.params[0]))
+print("beta1\t{:.4f}\t{:.4f}".format(result.x[1], ols_model.params[1]))
+print("sigma\t{:.4f}\t{:.4f}".format(result.x[2], ols_model.bse))
