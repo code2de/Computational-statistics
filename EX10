@@ -1,0 +1,75 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import make_blobs
+
+# Generate synthesized data of size 200
+n_samples = 200
+centers = [[1, 1], [-1, -1], [1, -1]]
+X, _ = make_blobs(n_samples=n_samples, centers=centers, cluster_std=0.6, random_state=0)
+
+# Original Data Plot
+plt.figure(figsize=(8, 6))
+plt.scatter(X[:, 0], X[:, 1], s=50)
+plt.title('Original Data Plot')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.show()
+
+# Standardize the features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Standardized Data plot
+plt.figure(figsize=(8, 6))
+plt.scatter(X_scaled[:, 0], X_scaled[:, 1], s=50)
+plt.title('Standardized Data plot')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.show()
+
+# Apply K-Means clustering with n=3
+kmeans = KMeans(n_clusters=3, random_state=0)
+kmeans.fit(X_scaled)
+
+# Plot the clusters with their centre points
+plt.figure(figsize=(8, 6))
+plt.scatter(X_scaled[:, 0], X_scaled[:, 1], c=kmeans.labels_, s=50, cmap='viridis')
+centers = kmeans.cluster_centers_
+plt.scatter(centers[:, 0], centers[:, 1], c='black', s=200, alpha=0.5)
+plt.title('K-Means Clustering with n=3')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.show()
+
+# Find the value of K for the selected data set using Elbow method
+inertia = []
+K = range(1, 10)
+for k in K:
+    kmeans = KMeans(n_clusters=k)
+    kmeans.fit(X_scaled)
+    inertia.append(kmeans.inertia_)
+
+# Elbow Graph for identifying the number of clusters
+plt.figure(figsize=(8, 6))
+plt.plot(K, inertia, 'bx-')
+plt.xlabel('k')
+plt.ylabel('Inertia')
+plt.title('Elbow Method for Optimal K')
+plt.show()
+
+# Apply K-Means clustering with the recommended Elbow value as k
+k_optimal = 3
+kmeans = KMeans(n_clusters=k_optimal, random_state=0)
+kmeans.fit(X_scaled)
+
+# Plot the clusters with their centre points
+plt.figure(figsize=(8, 6))
+plt.scatter(X_scaled[:, 0], X_scaled[:, 1], c=kmeans.labels_, s=50, cmap='viridis')
+centers = kmeans.cluster_centers_
+plt.scatter(centers[:, 0], centers[:, 1], c='black', s=200, alpha=0.5)
+plt.title('K-Means Clustering with Optimal K')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.show()
