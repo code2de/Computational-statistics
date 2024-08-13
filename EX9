@@ -1,0 +1,23 @@
+import matplotlib.pyplot as plt
+
+# Sample input data
+product = ['computer', 'monitor', 'laptop', 'printer', 'tablet']
+quantity = [320, 450, 300, 120, 280]
+
+# Create a figure and axis object
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+
+# Create the horizontal bar chart (H-Plot)
+ax1.barh(product, quantity)
+ax1.set_title('Product Quantity (H-Plot)')
+ax1.set_xlabel('Quantity')
+ax1.set_ylabel('Product')
+
+# Create the regular bar plot
+ax2.bar(product, quantity)
+ax2.set_title('Product Quantity (Bar Plot)')
+ax2.set_xlabel('Product')
+ax2.set_ylabel('Quantity')
+
+# Show the plot
+plt.show()
